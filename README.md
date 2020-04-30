@@ -2,7 +2,7 @@
 Application built with ASP.NET Core MVC 3.1
 
 ## To run the application
-Run commands:
+**Run commands:**  
 dotnet restore  
 dotnet run
 
