@@ -33,7 +33,7 @@ namespace AlbumViewer.Application.Services
                     {
                         if (!response.IsSuccessStatusCode)
                         {
-                            throw new Exception("Cannot retrieve Albums from API");
+                            throw new Exception("Cannot retrieve albums from API");
                         }
 
                         var content = await response.Content.ReadAsStringAsync();
@@ -41,9 +41,7 @@ namespace AlbumViewer.Application.Services
                         albums = JsonConvert.DeserializeObject<List<AlbumDto>>(content);
 
                         var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromHours(1));
-                        
                         _cache.Set("albums", albums, cacheEntryOptions);
-
                     }
                 }
             }
@@ -63,7 +61,7 @@ namespace AlbumViewer.Application.Services
                     {
                         if (!response.IsSuccessStatusCode)
                         {
-                            throw new Exception("Cannot retrieve Photos from API");
+                            throw new Exception("Cannot retrieve photos from API");
                         }
 
                         var content = await response.Content.ReadAsStringAsync();
@@ -71,7 +69,6 @@ namespace AlbumViewer.Application.Services
                         photos = JsonConvert.DeserializeObject<List<PhotoDto>>(content);
 
                         var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromHours(1));
-                        
                         _cache.Set("photos", photos, cacheEntryOptions);
                     }
                 }
@@ -82,22 +79,30 @@ namespace AlbumViewer.Application.Services
 
         public async Task<IEnumerable<CommentDto>> GetCommentsAsync(int photoId)
         {
-            using (var httpClient = new HttpClient())
+            List<CommentDto> comments;
+            
+            if(!_cache.TryGetValue("comments", out comments))
             {
-                using (var response = await httpClient.GetAsync($"{_appSettings.AlbumApiUrl}/comments"))
+                using (var httpClient = new HttpClient())
                 {
-                    if (!response.IsSuccessStatusCode)
+                    using (var response = await httpClient.GetAsync($"{_appSettings.AlbumApiUrl}/comments"))
                     {
-                        throw new Exception("Cannot retrieve Comments from API");
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            throw new Exception("Cannot retrieve comments from API");
+                        }
+
+                        var content = await response.Content.ReadAsStringAsync();
+                        
+                        comments = JsonConvert.DeserializeObject<List<CommentDto>>(content);
+
+                        var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromHours(1));
+                        _cache.Set("comments", comments, cacheEntryOptions);
                     }
-
-                    var content = await response.Content.ReadAsStringAsync();
-                    
-                    var comments = JsonConvert.DeserializeObject<List<CommentDto>>(content);
-
-                    return comments?.Where(c => c.PostId == photoId);
                 }
             }
+            
+            return comments?.Where(c => c.PostId == photoId);
         }
     }
 }

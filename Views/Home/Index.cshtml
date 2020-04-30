@@ -34,12 +34,12 @@
         <div><b>Album photos:</b></div>
         <div class="row mb-3">
             {% for (var i = 0; i < o.length; i++) { %}
-                <div class="col-3">
+                <div class="col-md-3">
                     <div>{%= o[i].title %}</div>
                     <div>
                         <img src="{%= o[i].thumbnailUrl %}" alt="{%= o[i].title %}">
                     </div>
-                    <button class="btn btn-light btn-sm btn-comments" data-id="{%= o[i].id %}">View Comments</button>
+                    <button class="btn btn-link btn-comments" data-id="{%= o[i].id %}">View Comments</button>
                     <div id="comments{%= o[i].id %}" class="comments"></div>
                 </div>
             {% } %}
