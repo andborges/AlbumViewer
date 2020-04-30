@@ -1,0 +1,45 @@
+﻿@model IEnumerable<AlbumViewer.Application.Dtos.AlbumDto>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to AlbumViewer</h1>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover mb-0">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th style="width: 100px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var album in Model)
+            {
+                <tr>
+                    <td>@album.Title</td>
+                    <td><button class="btn btn-primary btn-sm btn-photo" data-id="@album.Id">View Album</button></td>
+                </tr>
+                <tr id="photos@(album.Id)" class="photos">
+                    <td colspan="2"></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script type="text/x-tmpl" id="tmpl-photos">
+    <div class="row">
+        {% for (var i = 0; i < o.length; i++) { %}
+            <div class="col-3">
+                <div>{%= o[i].title %}</div>
+                <div>
+                    <img src="{%= o[i].thumbnailUrl %}" alt="{%= o[i].title %}">
+                </div>
+            </div>
+        {% } %}
+    </div>
+</script>
