@@ -36,6 +36,13 @@ namespace AlbumViewer.Controllers
             return Ok(model);
         }
 
+        public async Task<IActionResult> Comments(int id)
+        {
+            var model = await _albumApiService.GetCommentsAsync(id);
+
+            return Ok(model);
+        }
+
         public IActionResult Privacy()
         {
             return View();

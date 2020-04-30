@@ -9,7 +9,7 @@
 </div>
 
 <div class="table-responsive">
-    <table class="table table-hover mb-0">
+    <table class="table">
         <thead>
             <tr>
                 <th>Name</th>
@@ -23,22 +23,36 @@
                     <td>@album.Title</td>
                     <td><button class="btn btn-primary btn-sm btn-photo" data-id="@album.Id">View Album</button></td>
                 </tr>
-                <tr id="photos@(album.Id)" class="photos">
-                    <td colspan="2"></td>
-                </tr>
+                <tr id="photos@(album.Id)" class="photos"></tr>
             }
         </tbody>
     </table>
 </div>
 
 <script type="text/x-tmpl" id="tmpl-photos">
-    <div class="row">
-        {% for (var i = 0; i < o.length; i++) { %}
-            <div class="col-3">
-                <div>{%= o[i].title %}</div>
-                <div>
-                    <img src="{%= o[i].thumbnailUrl %}" alt="{%= o[i].title %}">
+    <td colspan="2">
+        <div><b>Album photos:</b></div>
+        <div class="row mb-3">
+            {% for (var i = 0; i < o.length; i++) { %}
+                <div class="col-3">
+                    <div>{%= o[i].title %}</div>
+                    <div>
+                        <img src="{%= o[i].thumbnailUrl %}" alt="{%= o[i].title %}">
+                    </div>
+                    <button class="btn btn-light btn-sm btn-comments" data-id="{%= o[i].id %}">View Comments</button>
+                    <div id="comments{%= o[i].id %}" class="comments"></div>
                 </div>
+            {% } %}
+        </div>
+    </td>
+</script>
+
+<script type="text/x-tmpl" id="tmpl-comments">
+    <div><b>Photo comments:</b></div>
+    <div class="mb-3">
+        {% for (var i = 0; i < o.length; i++) { %}
+            <div class="mb-2">
+                <b>{%= o[i].name %}:</b> {%= o[i].body %}
             </div>
         {% } %}
     </div>
